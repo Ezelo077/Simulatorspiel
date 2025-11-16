@@ -1,14 +1,17 @@
-const CACHE_VERSION = 'v1.0.1';
+const CACHE_VERSION = 'v1.0.2';
 const CACHE_NAME = `diktatorspiel-${CACHE_VERSION}`;
 
 const ASSETS = [
-  './',
-  './index.html',
+   './index.html',
   './style.css',
   './script.js',
-  './Desk.jpg',
   './manifest.webmanifest',
-  './icon.jpg'
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/buch.jpg',
+  './icons/schild.jpg',
+  './icons/daumen.jpg',
+  './icons/geldschein.jpg'
 ];
 
 self.addEventListener('install', (event) => {
