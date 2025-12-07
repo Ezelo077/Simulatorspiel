@@ -341,9 +341,3 @@ header {
 }
 
 
-
-/* Falls du später pro Kategorie tweaken willst: */
-.icon.education svg   { /* optional: andere Größe/Farbe */ }
-.icon.security svg    { /* optional */ }
-.icon.happiness svg   { /* optional */ }
-.icon.finances svg    { /* optional */ }
