@@ -1,7 +1,10 @@
-// 4 Kategorien, Startwert je 5 Punkte, Limit 0–10
+
+let currentGameOverSound = null;
+
+
 const CATEGORIES = ["Bildung", "Sicherheit", "Zufriedenheit", "Finanzen"];
 
-// --- Dein volles MASTER-DECK (15 Fragen) ---
+
 const DECK = [
   {
     id: 1,
@@ -213,6 +216,159 @@ const DECK = [
       effects: { Zufriedenheit: -1, Bildung: +2 }
     }
   },
+    {
+    id: 16,
+    prompt: "Einführung des 'Schwobentalers' – eigene Landeswährung.",
+    meta: "Finanzen",
+    left:  {
+      label: "Einführen",
+      consequence: "Wirtschaft steht auf dem Kopf. Schwobentaler geht nach hinten los. Menschen beschäftigen sichh mehr mit Finanzen",
+      effects: { Finanzen: -1, Zufriedenheit: -1, Bildung: +1 }
+    },
+    right: {
+      label: "Nicht Einführen",
+      consequence: "Euro bleibt stabil, jedoch beschäftigt sich niemand mit der Wirtschaft",
+      effects: { Finanzen: -1 }
+    }
+  },
+    {
+    id: 17,
+    prompt: "Ausbau von Windräden auf Schwarzwald-Gipfeln.",
+    meta: "Finanzen",
+    left:  {
+      label: "Bauen",
+      consequence: "Strompreise sind deutlich günstiger, aber die Anwohner sind genervt von den Baustellen",
+      effects: { Finanzen: +2, Zufriedenheit: -1,}
+    },
+    right: {
+      label: "Nicht Bauen",
+      consequence: "Strompreise explodierenm jedoch bleibt Natur erhalten",
+      effects: { Finanzen: -1, Zufriedenheit: +1 }
+    }
+  },
+    {
+    id: 18,
+    prompt: "Verstaatlichung aller Banken.",
+    meta: "Finanzen",
+    left: {
+      label: "Umsetzen",
+      consequence: "Staat kontrolliert das Geld, Bürokratie explodiert.",
+      effects: { Finanzen: -1, Zufriedenheit: -1 }
+    },
+    right: {
+      label: "Ablehnen",
+      consequence: "Reiche werden reicher, Bürger fühlen sich ohnmächtig.",
+      effects: { Finanzen: +1, Zufriedenheit: -1 }
+    }
+  },
+  {
+    id: 19,
+    prompt: "Abschaffung des Bargelds.",
+    meta: "Sicherheit",
+    left: {
+      label: "Umsetzen",
+      consequence: "Steuerhinterziehung sinkt, ältere Menschen überfordert.",
+      effects: { Sicherheit: +1, Zufriedenheit: -1 } 
+    },
+    right: {
+      label: "Ablehnen",
+      consequence: "Schattenwirtschaft boomt.",
+      effects: { Sicherheit: -1, Zufriedenheit: +1 }
+    }
+  },
+  {
+    id: 20,
+    prompt: "Verbot von Alkohol.",
+    meta: "Gesundheit",
+    left: {
+      label: "Umsetzen",
+      consequence: "Produktivität steigt, Schwarzmarkt wächst.",
+      effects: { Sicherheit: -1, Bildung: +1 }
+    },
+    right: {
+      label: "Ablehnen",
+      consequence: "Bürger feiern, Krankenhäuser voll.",
+      effects: { Zufriedenheit: +1, Sicherheit: -1 }
+    }
+  },
+  {
+    id: 21,
+    prompt: "Einführung einer Ehepflicht.",
+    meta: "Zufriedenheit",
+    left: {
+      label: "Umsetzen",
+      consequence: "Hochzeiten überall, Scheidungen explodieren.",
+      effects: { Zufriedenheit: -1 }
+    },
+    right: {
+      label: "Ablehnen",
+      consequence: "Freiheit bleibt, Geburtenrate sinkt.",
+      effects: { Zufriedenheit: +1 }
+    }
+  },
+  {
+    id: 22,
+    prompt: "Jeder Bürger muss einen Baum pflanzen.",
+    meta: "Sicherheit",
+    left: {
+      label: "Umsetzen",
+      consequence: "Städte werden grün, aber Organisation kostet Milliarden.",
+      effects: { Sicherheit: +1, Finanzen: -2 }
+    },
+    right: {
+      label: "Ablehnen",
+      consequence: "Umwelt bleibt trist.",
+      effects: { Zufriedenheit: -1, Sicherheit: -1 }
+    }
+  },
+
+ {
+    id: 23,
+    prompt: "Einführung von Uniformen für alle Bürger.",
+    meta: "Sicherheit",
+    left: {
+      label: "Umsetzen",
+      consequence: "Ordnung steigt, Individualität verschwindet.",
+      effects: { Sicherheit: +1, Zufriedenheit: -1 }
+    },
+    right: {
+      label: "Ablehnen",
+      consequence: "Vielfalt bleibt, aber Neid wächst.",
+      effects: { Sicherheit: -1, Zufriedenheit: +1 }
+    }
+  },
+   {
+    id: 24,
+    prompt: "Verbot von Religion.",
+    meta: "Sicherheit",
+    left: {
+      label: "Umsetzen",
+      consequence: "Weniger Konflikte, Menschen fühlen Leere.",
+      effects: { Sicherheit: +1, Zufriedenheit: -2 }
+    },
+    right: {
+      label: "Ablehnen",
+      consequence: "Vielfalt blüht, Glaubensstreit eskaliert.",
+      effects: { Sicherheit: -1, Zufriedenheit: +1 }
+    }
+  },
+
+{
+    id: 25,
+    prompt: "Erhöhung der Staatsausgaben für Propaganda.",
+    meta: "Zufriedenheit",
+    left: {
+      label: "Umsetzen",
+      consequence: "Alle Medien loben dich, niemand glaubt ihnen.",
+      effects: { Zufriedenheit: -1, Bildung: -1 }
+    },
+    right: {
+      label: "Ablehnen",
+      consequence: "Presse bleibt kritisch, Beliebtheit sinkt.",
+      effects: { Zufriedenheit: -1, Bildung: +1 }
+    }
+  },
+
   {
     id: 15,
     prompt: "Freibäder sollen verboten werden, um Wasser zu sparen und Unfälle zu vermeiden.",
@@ -230,6 +386,99 @@ const DECK = [
   }
 ];
 
+
+const RESCUE_CARDS = {
+  Zufriedenheit: [
+    {
+      prompt: "Du kannst die Bevölkerung durch eine große Gratis-Show beruhigen.",
+      left:  { label: "Show finanzieren (-5 Finanzen)", effects: { Zufriedenheit: +4, Finanzen: -5 }},
+      right: { label: "Show absagen", effects: {} }
+    },
+    {
+      prompt: "Du kannst eine landesweite PR-Kampagne starten.",
+      left:  { label: "Kampagne starten (-3 Bildung)", effects: { Zufriedenheit: +3, Bildung: -3 }},
+      right: { label: "Nicht starten", effects: {} }
+    }
+  ],
+
+  Sicherheit: [
+    {
+      prompt: "Geheime Eliteeinheit einsetzen?",
+      left:  { label: "Einsetzen (-4 Finanzen)", effects: { Sicherheit: +4, Finanzen: -4 }},
+      right: { label: "Nein", effects: {} }
+    },
+    {
+      prompt: "Strengere Gesetze erlassen?",
+      left:  { label: "Erlassen (-3 Zufriedenheit)", effects: { Sicherheit: +3, Zufriedenheit: -3 }},
+      right: { label: "Nein", effects: {} }
+    }
+  ],
+
+  Bildung: [
+    {
+      prompt: "Elite-Unis fördern?",
+      left:  { label: "Fördern (-4 Finanzen)", effects: { Bildung: +4, Finanzen: -4 }},
+      right: { label: "Nein", effects: {} }
+    },
+    {
+      prompt: "Unis von Experten leiten?",
+      left:  { label: "Einsetzen (-3 Zufriedenheit)", effects: { Bildung: +3, Zufriedenheit: -3 }},
+      right: { label: "Nein", effects: {} }
+    }
+  ],
+
+  Finanzen: [
+    {
+      prompt: "Schwarze Kassen öffnen?",
+      left:  { label: "Öffnen (-4 Sicherheit)", effects: { Finanzen: +4, Sicherheit: -4 }},
+      right: { label: "Nein", effects: {} }
+    },
+    {
+      prompt: "Einmalige Steuererhöhung?",
+      left:  { label: "Einführen (-3 Zufriedenheit)", effects: { Finanzen: +3, Zufriedenheit: -3 }},
+      right: { label: "Nein", effects: {} }
+    }
+  ]
+};
+
+
+// --- Soundeffekte für Game Over / Rettung (WAV) ---
+const END_SOUNDS = {
+  Finanzen: {
+    high: new Audio('sounds/FinanzenZuViel.wav'),
+    low:  new Audio('sounds/FinanzenZuWenig.wav')
+  },
+  Bildung: {
+    high: new Audio('sounds/BildungZuViel.wav'),
+    low:  new Audio('sounds/BildungZuWenig.wav')
+  },
+  Sicherheit: {
+    high: new Audio('sounds/SicherheitZuViel.wav'),
+    low:  new Audio('sounds/SicherheitZuWenig.wav')
+  },
+  Zufriedenheit: {
+    high: new Audio('sounds/ZufriedenheitZuViel.wav'),
+    low:  new Audio('ZufriedenheitZuWenig.wav')
+  }
+};
+
+function playEndSound(cat, reason) {
+  const side = reason === 'zu niedrig' ? 'low' : 'high';
+  const sound = END_SOUNDS[cat] && END_SOUNDS[cat][side];
+  if (!sound) return;
+
+  try {
+    sound.currentTime = 0;
+    sound.play();
+  } catch (e) {
+    console.error("Sound konnte nicht abgespielt werden:", cat, reason, e);
+  }
+}
+
+
+
+
+
 // --- Zufällige Karten ziehen ---
 function sampleDeck(base, n) {
   const arr = base.slice();
@@ -246,8 +495,12 @@ const state = {
   index: 0,
   history: [],
   scores: { Bildung: 5, Sicherheit: 5, Zufriedenheit: 5, Finanzen: 5 },
-  playDeck: sampleDeck(DECK, 5)
+  playDeck: sampleDeck(DECK, 10),
+  rescueUsed: false,
+  pendingRescue: false   // <<< neu
 };
+
+
 
 // --- Hilfsfunktionen ---
 const $ = (sel, el=document) => el.querySelector(sel);
@@ -269,15 +522,104 @@ function updateBars() {
   }
 }
 
+// --------------------------------------------------------------
+//  PUNKTE-ANIMATION (NEU)
+// --------------------------------------------------------------
+function showPointsAnimation(effects) {
+  const board = document.getElementById("board");
+
+  const wrap = document.createElement("div");
+  wrap.className = "points-float";
+
+  wrap.innerHTML = Object.entries(effects)
+    .map(([cat, val]) => {
+      const cls = val > 0 ? "points-positive" : "points-negative";
+      const sign = val > 0 ? "+" : "";
+      return `<div class="${cls}">${sign}${val} ${cat}</div>`;
+    })
+    .join("");
+
+  board.appendChild(wrap);
+
+  setTimeout(() => wrap.remove(), 5000);
+}
+// --------------------------------------------------------------
+
 function checkGameOver() {
   for (const [cat, val] of Object.entries(state.scores)) {
+
+    // Rettung zuerst abfangen
+    if (!state.rescueUsed && (val <= 0 || val >= 10)) {
+      launchRescue(cat);
+      return true;
+    }
+
+    // echtes Game Over NACH Rettung
     if (val <= 0 || val >= 10) {
-      showGameOver(cat, val <= 0 ? "zu niedrig" : "zu hoch");
+      const reason = val <= 0 ? "zu niedrig" : "zu hoch";
+      showGameOver(cat, reason);  // Sound kommt dort rein
       return true;
     }
   }
   return false;
 }
+
+
+
+
+function launchRescue(cat) {
+  state.rescueUsed = true;
+  state.pendingRescue = true;
+
+  const options = RESCUE_CARDS[cat];
+  const rescueCard = options[Math.floor(Math.random() * options.length)];
+
+  const board = document.getElementById("board");
+  board.innerHTML = "";
+
+  const card = create("article", "card rescue above"); // <<< direkt rescue setzen
+
+  const prompt = create("div", "prompt");
+  prompt.textContent = "⚠️ Du stehst kurz vor dem Verlust!\n" + rescueCard.prompt;
+
+  const choices = create("div", "choices");
+
+  const btnLeft = create("button", "btn btn-left");
+  btnLeft.textContent = rescueCard.left.label;
+  
+  const btnRight = create("button", "btn btn-right");
+  btnRight.textContent = rescueCard.right.label;
+
+  btnLeft.addEventListener("click", () => {
+    applyRescueEffects(rescueCard.left.effects);
+    state.pendingRescue = false;
+    renderBoard();
+  });
+
+  btnRight.addEventListener("click", () => {
+    state.pendingRescue = false; 
+    renderBoard();
+  });
+
+  choices.append(btnLeft, btnRight);
+
+  card.append(prompt, document.createElement("div"), choices);
+  board.appendChild(card);
+}
+
+
+function applyRescueEffects(effects) {
+  for (const [cat, val] of Object.entries(effects)) {
+    state.scores[cat] += val;
+    state.scores[cat] = Math.max(0, Math.min(10, state.scores[cat]));
+  }
+
+  updateBars();
+  state.pendingRescue = false;
+}
+
+
+
 
 const GAME_OVER_MESSAGES = {
   Bildung: {
@@ -298,7 +640,12 @@ const GAME_OVER_MESSAGES = {
   }
 };
 
+
 function showGameOver(cat, reason) {
+
+  // 🎵 SOUND HIER – und NUR HIER
+  playEndSound(cat, reason);
+
   const board = $('#board');
   board.innerHTML = '';
   const wrap = create('div', 'card');
@@ -307,7 +654,9 @@ function showGameOver(cat, reason) {
   const end = create('div', 'end');
 
   const msgSet = GAME_OVER_MESSAGES[cat];
-  let msg = msgSet ? (reason === "zu niedrig" ? msgSet.low : msgSet.high) : `Deine Politik hat ${cat} zerstört.`;
+  let msg = msgSet
+    ? (reason === "zu niedrig" ? msgSet.low : msgSet.high)
+    : `Deine Politik hat ${cat} zerstört.`;
 
   end.innerHTML = `
     <h2>Spiel vorbei!</h2>
@@ -319,6 +668,9 @@ function showGameOver(cat, reason) {
   board.appendChild(wrap);
 }
 
+
+
+
 function showToast(msg) {
   const t = $('#toast');
   t.textContent = msg;
@@ -327,37 +679,126 @@ function showToast(msg) {
   t._hide = setTimeout(() => t.classList.remove('show'), 1700);
 }
 
+
+
+
+// --------------------------------------------------------------
+//  ENTSCHEIDUNG MIT PUNKTE-ANIMATION (ANGEPAST)
+// --------------------------------------------------------------
 function decide(side, data) {
   const pick = data[side];
   const eff = pick.effects || {};
+
+  // Punktanimation GLOBAL anzeigen
+  showPointsAnimation(eff);
+
+  // Werte ändern
   for (const [cat, val] of Object.entries(eff)) {
     if (state.scores[cat] === undefined) state.scores[cat] = 5;
     state.scores[cat] += val;
-    if (state.scores[cat] > 10) state.scores[cat] = 10;
-    if (state.scores[cat] < 0) state.scores[cat] = 0;
+    state.scores[cat] = Math.max(0, Math.min(10, state.scores[cat]));
   }
+
   state.history.push({ id: data.id, choice: side, consequence: pick.consequence, effects: eff });
-  showToast(pick.consequence);
+// showToast(pick.consequence);
+
+
   state.index++;
   updateBars();
+
   if (!checkGameOver()) setTimeout(renderBoard, 180);
 }
 
+
+
+
+
+
+function showPointsAnimation(effects) {
+  const overlay = document.getElementById('points-overlay');
+  if (!overlay) return;
+
+  const wrap = document.createElement('div');
+  wrap.className = "points-float";
+
+  let html = "";
+  for (const [cat, val] of Object.entries(effects)) {
+    const cls = val >= 0 ? "points-positive" : "points-negative";
+    // Kategorie + Wert anzeigen
+    html += `<div class="${cls}">${cat}: ${val >= 0 ? "+" : ""}${val}</div>`;
+  }
+
+  wrap.innerHTML = html;
+  overlay.appendChild(wrap);
+
+  // Nach der Animation wieder entfernen
+  setTimeout(() => wrap.remove(), 2300);
+}
+
+
+
+
+
 function restart() {
+   // 🎵 Laufenden GameOver-Sound stoppen
+  if (currentGameOverSound) {
+    currentGameOverSound.pause();
+    currentGameOverSound.currentTime = 0;
+    currentGameOverSound = null;
+  }
   state.index = 0;
   state.history = [];
   state.scores = { Bildung: 5, Sicherheit: 5, Zufriedenheit: 5, Finanzen: 5 };
-  state.playDeck = sampleDeck(DECK, 5);
+  state.playDeck = sampleDeck(DECK, 10);
+  state.rescueUsed = false;
+  state.pendingRescue = false;
+
   renderBoard();
   updateBars();
 }
+
+
+function playEndSound(cat, reason) {
+  // Wenn bereits ein Sound läuft → stoppen
+  if (currentGameOverSound) {
+    currentGameOverSound.pause();
+    currentGameOverSound.currentTime = 0;
+  }
+
+  let file = "";
+
+  if (cat === "Finanzen") {
+    file = reason === "zu hoch" ? "FinanzenZuViel.wav" : "FinanzenZuWenig.wav";
+  }
+  if (cat === "Bildung") {
+    file = reason === "zu hoch" ? "BildungZuViel.wav" : "BildungZuWenig.wav";
+  }
+  if (cat === "Sicherheit") {
+    file = reason === "zu hoch" ? "SicherheitZuViel.wav" : "SicherheitZuWenig.wav";
+  }
+  if (cat === "Zufriedenheit") {
+    file = reason === "zu hoch" ? "ZufriedenheitZuViel.wav" : "ZufriedenheitZuWenig.wav";
+  }
+
+  currentGameOverSound = new Audio(file);
+  currentGameOverSound.volume = 1.0;
+  currentGameOverSound.play().catch(() => {});
+}
+
+
+
+
 
 function renderBoard() {
   const board = $('#board');
   board.innerHTML = '';
 
   if (!state.playDeck || state.playDeck.length === 0) {
-    board.innerHTML = `<div class="card"><div class="end"><h2>Kein Fragen-Deck geladen</h2></div></div>`;
+    board.innerHTML = `
+      <div class="card">
+        <div class="end"><h2>Kein Fragen-Deck geladen</h2></div>
+      </div>
+    `;
     return;
   }
 
@@ -368,7 +809,8 @@ function renderBoard() {
     const end = create('div', 'end');
 
     const scoreList = Object.entries(state.scores)
-      .map(([k, v]) => `<div><strong>${k}:</strong> ${v}</div>`).join('');
+      .map(([k, v]) => `<div><strong>${k}:</strong> ${v}</div>`)
+      .join('');
 
     const historyText = state.history.map(h => h.consequence).join(' ');
 
@@ -381,37 +823,43 @@ function renderBoard() {
       <p style="text-align:justify; max-width:560px; margin:0 auto 16px;">${historyText}</p>
       <button class="btn" onclick="restart()">Nochmal spielen</button>
     `;
+
     wrap.appendChild(end);
     board.appendChild(wrap);
     $('#bar').style.width = '100%';
     return;
   }
 
+  // Karte
   const cardData = state.playDeck[state.index];
-  const card = create('article', 'card above');
-  const badgeL = create('div', 'badge left');
-  badgeL.textContent = cardData.left.label;
-  const badgeR = create('div', 'badge right');
-  badgeR.textContent = cardData.right.label;
-  card.append(badgeL, badgeR);
+  
+  let cardClass = 'card above';
+if (state.pendingRescue) cardClass = 'card rescue above';
+const card = create('article', cardClass);
 
-  const meta = create('div', 'meta');
-  meta.textContent = cardData.meta || '';
+
+
   const prompt = create('div', 'prompt');
   prompt.textContent = cardData.prompt;
+
   const spacer = create('div');
+
   const choices = create('div', 'choices');
 
   const btnLeft = create('button', 'btn btn-left');
   btnLeft.textContent = `← ${cardData.left.label}`;
+
   const btnRight = create('button', 'btn btn-right');
   btnRight.textContent = `${cardData.right.label} →`;
+
   btnLeft.addEventListener('click', () => decide('left', cardData));
   btnRight.addEventListener('click', () => decide('right', cardData));
+
   choices.append(btnLeft, btnRight);
 
-  card.append(meta, prompt, spacer, choices);
+  card.append(prompt, spacer, choices);
   board.appendChild(card);
+
   updateProgress();
   updateBars();
 }
