@@ -134,6 +134,10 @@ const create = (tag, cls) => {
   return n;
 };
 
+const INTRO_SPEAK_SOUNDS = [
+  "./sounds/SprechenEins.mpeg",
+  "./sounds/SprechenZwei.mpeg"
+];
 
 
 /* =========================================================
@@ -724,6 +728,8 @@ function applyVolumeToAllSounds() {
 
   // GameOver
   if (currentGameOverSound) currentGameOverSound.volume = v;
+    if (introSpeakAudio) introSpeakAudio.volume = v;
+
 
   // Musik + Timer: wenn gemutet -> 0, sonst normal
   const mv = musicMuted ? 0 : v;
@@ -866,6 +872,32 @@ function stopAllMusicAndTimer() {
 }
 
 
+let introSpeakAudio = null;
+let introSpeakToggle = 0;
+
+function stopIntroSpeak() {
+  if (!introSpeakAudio) return;
+  introSpeakAudio.pause();
+  introSpeakAudio.currentTime = 0;
+  introSpeakAudio = null;
+}
+
+function playIntroSpeakForLine(lineIndex) {
+  // Sicherheit: wenn Intro vorbei ist -> nix mehr abspielen
+  if (state.introDone) return;
+
+  // Abwechselnd pro Satz: 0,1,0,1...
+  const idx = lineIndex % 2;
+  const src = INTRO_SPEAK_SOUNDS[idx];
+  if (!src) return;
+
+  // laufenden Sprechsound stoppen und neu starten
+  stopIntroSpeak();
+
+  introSpeakAudio = new Audio(src);
+  introSpeakAudio.volume = masterVolume;     // Lautstärkeregler greift
+  introSpeakAudio.play().catch((e) => console.warn("[INTRO SPEAK] blocked:", e));
+}
 
 
 
@@ -1312,6 +1344,7 @@ function renderIntro() {
 
   const closeIntro = () => {
     clearIntroAnim();
+    stopIntroSpeak(); 
     state.introDone = true;
     renderBoard();
   };
@@ -1336,6 +1369,8 @@ function renderIntro() {
       .slice(0, i + 1)
       .map((t) => `<div class="dialog-line">${t}</div>`)
       .join("");
+      playIntroSpeakForLine(state.introLineIndex);
+
 
     playMascotSpeak(mascot);
 
